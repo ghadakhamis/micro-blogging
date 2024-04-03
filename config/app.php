@@ -123,4 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'user_image_size' => env('USER_IMAGE_SIZE', 1000),
 ];

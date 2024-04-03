@@ -2,34 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
-use App\Services\AuthService;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
+use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/**
+ * AuthController for regist and login user
+ */
 class AuthController extends Controller
 {
-    public function __construct(AuthService $service)
+    /**
+     * @param AuthService $service
+     */
+    public function __construct(protected AuthService $service)
     {
-        $this->service = $service;
     }
 
-    public function register(RegisterRequest $request)
+    /**
+     * Register user
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
+    public function register(RegisterRequest $request): JsonResponse
     {
         $user = $this->service->register($request->validated());
         return response()->json(['user' => new UserResource($user), 'token' => $user->generateToken()], Response::HTTP_OK);
     }
 
-    public function login(LoginRequest $request)
+    /**
+     * Login user
+     * @param LoginRequest $request
+     * @return JsonResponse
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
         $user = $this->service->login($request->validated());
         
-        if ($user) {
-            return response()->json(['user' => new UserResource($user), 'token' => $user->generateToken()], Response::HTTP_OK);
-        }
-
-        return response()->json(['message' => trans('auth.failed'), 'errors' => ['email' => trans('auth.failed')]], Response::HTTP_UNPROCESSABLE_ENTITY);
+        return $user? 
+            response()->json(['user' => new UserResource($user), 'token' => $user->generateToken()], Response::HTTP_OK)
+            : response()->json(['message' => trans('auth.failed'), 'errors' => ['email' => trans('auth.failed')]], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

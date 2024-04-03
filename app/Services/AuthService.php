@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Classes\PublicUploader;
-use App\Repositories\UserRepository;
 use App\Models\User;
-use Hash;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService extends BaseService
 {

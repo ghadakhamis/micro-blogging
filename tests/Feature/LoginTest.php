@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -78,6 +76,7 @@ class LoginTest extends TestCase
     public function test_success_login(): void
     {
         $password = $this->faker->asciify('User-*****@'.rand(1,9));
+        /** @var User $user */
         $user     = User::factory()->create(['password' => $password]);
         $body     = ['email' => $user->email, 'password' => $password];
         $response = $this->json('POST', route('login'), $body);

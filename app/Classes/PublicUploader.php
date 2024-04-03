@@ -3,22 +3,26 @@
 namespace App\Classes;
 
 use App\Interfaces\UploaderInterFace;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 use Carbon\Carbon;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class PublicUploader implements UploaderInterFace
 {
-    public function upload(UploadedFile $file, string $directory)
+    public function upload(UploadedFile $file, string $directory): string
     {
         $this->createDirectory($directory);
         $fileName = $this->generateFileName($file);
+
+        /** @var FilesystemAdapter $disk */
+        $disk     = Storage::disk('public');
         
-        $path = Storage::disk('public')->putFileAs($directory, $file, $fileName);
-        return Storage::disk('public')->url($path);
+        $path = $disk->putFileAs($directory, $file, $fileName);
+        return $disk->url($path);
     }
 
-    private function createDirectory($directory)
+    private function createDirectory(string $directory): void
     {
         $path = storage_path('app/public/' . $directory.'/');
         if(!is_dir($path)) {
@@ -26,7 +30,7 @@ class PublicUploader implements UploaderInterFace
         }
     }
 
-    private function generateFileName(UploadedFile $file)
+    private function generateFileName(UploadedFile $file): string
     {
         return Carbon::now()->timestamp. '.' . $file->getClientOriginalExtension();
     }

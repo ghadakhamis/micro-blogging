@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -17,6 +18,13 @@ class UserFactory extends Factory
     protected static ?string $password;
 
     /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     */
+    protected $model = User::class;
+
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -24,7 +32,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'username'       => fake()->firstName(),
+            'username'       => fake()->userName(),
             'email'          => fake()->unique()->email(),
             'password'       => static::$password ??= Hash::make('password'),
             'image'          => fake()->imageUrl(640, 480, 'profile', true),

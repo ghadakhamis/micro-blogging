@@ -27,7 +27,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function update(array $data, int $id, bool $force = true, bool $withTrashed = false)
     {
-        $model = $withTrashed? $this->withTrashed()->find($id) : $this->find($id);
+        $model = $withTrashed? $this->model->withTrashed()->find($id) : $this->find($id);
 
         $force? $model->forceFill($data)->save() : $model->update($data);
 

@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Response;
@@ -46,7 +45,8 @@ class RegisterTest extends TestCase
     /** test */
     public function test_fail_register_not_unique_email(): void
     {
-        $user          =  User::factory()->create();
+        /** @var User $user */
+        $user          = User::factory()->create();
         $body          = $this->getBody();
         $body['email'] = $user->email;
         $response      = $this->json('POST', route('register'), $body);
@@ -167,13 +167,16 @@ class RegisterTest extends TestCase
             'username' => $body['username'],
             'image'    => '/storage/profiles/'.now()->timestamp.'.png'
         ]);
-        Storage::disk('public')->assertExists('/profiles/'.now()->timestamp.'.png');
+
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+        $disk->assertExists('/profiles/'.now()->timestamp.'.png');
     }
 
     private function getBody(): array
     {
         return  [
-            'username' => $this->faker->firstName(),
+            'username' => $this->faker->userName(),
             'email'    => $this->faker->unique()->email(),
             'password' => $this->faker->asciify('User-*****@'.rand(1,9)),
             'image'    => UploadedFile::fake()->image('test.png'),

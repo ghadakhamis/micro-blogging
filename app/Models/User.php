@@ -57,4 +57,9 @@ class User extends Authenticatable
             set: fn (string $value) => Hash::make($value),
         );
     }
+
+    public function generateToken()
+    {
+        return $this->createToken('auth_token')->plainTextToken;
+    }
 }

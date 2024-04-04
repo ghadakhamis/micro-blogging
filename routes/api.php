@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TweetController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\FollowerController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(
@@ -12,6 +12,8 @@ Route::prefix('v1')->group(
 
         Route::middleware(['auth:user'])->group(function () {
             Route::apiResource('tweets', TweetController::class)->only('store');
+            Route::post('users/{user}/follow', [FollowerController::class, 'follow'])->name('users.follow');
+            Route::post('users/{user}/un-follow', [FollowerController::class, 'unFollow'])->name('users.un_follow');
         });
     }
 );

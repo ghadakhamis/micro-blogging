@@ -51,4 +51,11 @@ interface BaseRepositoryInterface
      * @return mixed
      */
     public function findBy(string $field, string $value, Array $columns = array('*'));
+
+    /**
+     * @param  array $attr
+     * @param  array $value
+     * @return mixed
+     */
+    public function firstOrCreate(Array $attr, Array $value);
 }

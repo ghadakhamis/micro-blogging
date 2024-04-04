@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,10 +21,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
-        'email',
-        'password',
-        'image',
+        'username', 'email', 'password', 'image', 'following_count', 'followers_count',
     ];
 
     /**
@@ -54,6 +52,26 @@ class User extends Authenticatable
     public function tweets(): HasMany
     {
         return $this->hasMany(Tweet::class);
+    }
+
+    /**
+     * Get users that are followed by this user.
+     *
+     * @return BelongsToMany
+     */
+    public function followings(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'following_id')->withTimestamps();
+    }
+
+    /**
+     * Get users that follow this user.
+     *
+     * @return BelongsToMany
+     */
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'user_id')->withTimestamps();
     }
 
     /**

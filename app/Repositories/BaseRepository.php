@@ -56,4 +56,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->where($field, $value)->first($columns);
     }
+
+    public function firstOrCreate(Array $attr, Array $value)
+    {
+        return $this->model->firstOrCreate($attr, $value);
+    }
 }

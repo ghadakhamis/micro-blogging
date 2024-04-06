@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Filters\QueryFilters;
 use App\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;   
 
@@ -60,5 +61,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function firstOrCreate(Array $attr, Array $value)
     {
         return $this->model->firstOrCreate($attr, $value);
+    }
+
+    public function filters(QueryFilters $filters)
+    {
+        return $this->model->filter($filters)->paginate();
     }
 }

@@ -12,6 +12,6 @@ class TweetObserver
      */
     public function creating(Tweet $tweet): void
     {
-        $tweet->user_id = Auth::id();
+        $tweet->user_id = Auth::id()?? $tweet->user_id;
     }
 }

@@ -11,7 +11,7 @@ Route::prefix('v1')->group(
         Route::post('login', [AuthController::class, 'login'])->name('login');
 
         Route::middleware(['auth:user'])->group(function () {
-            Route::apiResource('tweets', TweetController::class)->only('store');
+            Route::apiResource('tweets', TweetController::class)->only(['index', 'store']);
             Route::post('users/{user}/follow', [FollowerController::class, 'follow'])->name('users.follow');
             Route::post('users/{user}/un-follow', [FollowerController::class, 'unFollow'])->name('users.un_follow');
         });

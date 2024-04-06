@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Filterable;
 use App\Observers\TweetObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,17 +12,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[ObservedBy([TweetObserver::class])]
 class Tweet extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'text',
-        'user_id',
-    ];
+    protected $fillable = ['text', 'user_id'];
 
     /**
      * Get the user that owns the tweet.
